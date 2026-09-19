@@ -10,8 +10,6 @@ const observer = new IntersectionObserver((entries)=>{
 revealItems.forEach(el=>observer.observe(el));
 
 const modal=document.getElementById("modal");
-const title=document.getElementById("modalTitle");
-const copy=document.getElementById("modalCopy");
 const modalVideo=document.getElementById("modalVideo");
 const closeVideoModal=()=>{
   modalVideo.pause();
@@ -21,8 +19,6 @@ const closeVideoModal=()=>{
 };
 document.querySelectorAll(".video-card").forEach(card=>{
   card.addEventListener("click",()=>{
-    title.textContent=card.dataset.title || "Memory";
-    copy.textContent=card.dataset.copy || "";
     modalVideo.src=card.dataset.video;
     modal.classList.add("open");
     modalVideo.currentTime=0;

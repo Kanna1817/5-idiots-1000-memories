@@ -22,7 +22,7 @@ body:after{content:"";position:fixed;inset:0;z-index:-2;opacity:.22;background-i
 footer{padding:25px;text-align:center;background:#12233e;color:#aebbd0;font:17px Caveat,cursive}footer span{color:#ef8a87}
 .modal{position:fixed;inset:0;background:#0b142bcc;display:none;place-items:center;z-index:100;backdrop-filter:blur(7px)}.modal.open{display:grid}.modal-card{width:min(450px,90vw);background:#fff4d4;color:#20283b;padding:42px;text-align:center;box-shadow:0 25px 70px #0008;position:relative;transform:translateY(20px);animation:pop .35s forwards}.modal-card h2{font:700 42px Caveat;margin:8px}.video-modal-card{width:min(820px,94vw);padding:28px}.modal-video{width:100%;max-height:62vh;display:block;background:#000;object-fit:contain;margin:0 auto 10px;border-radius:10px}.modal-card p{font:15px/1.6 Inter;color:#625d58}.modal-icon{width:65px;height:65px;margin:auto;border-radius:50%;display:grid;place-items:center;background:#22395d;color:#fff}.close{position:absolute;right:14px;top:8px;border:0;background:none;font-size:30px;cursor:pointer;color:#28364e}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}.delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}
-@keyframes draw{to{stroke-dashoffset:0}}@keyframes pop{to{transform:translateY(0)}}@media(max-width:900px){.site-shell{width:100%;margin:0;border-radius:0}.hero{grid-template-columns:1fr;padding:55px 30px}.hero-collage{margin-top:20px;transform:scale(.82) rotate(-2deg);transform-origin:top center;height:410px}.section-pad{padding:55px 30px}.squad-grid{grid-template-columns:repeat(2,1fr)}.squad-grid .member:last-child{grid-column:1/-1;max-width:50%;justify-self:center}.nav{gap:14px;overflow:auto;justify-content:flex-start;white-space:nowrap}.video-row{grid-template-columns:1fr}.map{transform:scale(.9);transform-origin:top left;width:111%;margin-bottom:-40px}.browser-actions{display:none}}@media(max-width:560px){.browser-bar{padding:0 10px}.browser-tools,.address{display:none}.nav{font-size:17px}.hero h1{font-size:58px}.hero-collage{transform:scale(.54) rotate(-2deg);transform-origin:top center;width:100%;margin-left:0;height:320px}.squad-grid{grid-template-columns:1fr}.squad-grid .member:last-child{max-width:none;grid-column:auto}.message-board{height:430px}.sticky{width:145px;font-size:16px}.s1{left:4%}.s2{right:4%}.s3{left:4%;bottom:12%}.s4{right:4%;bottom:12%}.pin{width:115px}.pin img{width:75px;height:60px}.map{height:390px;transform:scale(.72);width:139%;margin-left:-20%}}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes pop{to{transform:translateY(0)}}@media(max-width:900px){.site-shell{width:100%;margin:0;border-radius:0}.hero{grid-template-columns:1fr;padding:55px 30px}.hero-collage{margin-top:20px;transform:scale(.82) rotate(-2deg);transform-origin:top center;height:410px}.section-pad{padding:55px 30px}.squad-grid{grid-template-columns:repeat(2,1fr)}.squad-grid .member:last-child{grid-column:1/-1;max-width:50%;justify-self:center}.nav{gap:14px;overflow:auto;justify-content:flex-start;white-space:nowrap}.video-row{grid-template-columns:1fr}.map{transform:scale(.9);transform-origin:top left;width:111%;margin-bottom:-40px}.browser-actions{display:none}}@media(max-width:560px){.browser-bar{padding:0 10px}.browser-tools,.address{display:none}.nav{font-size:17px}.hero h1{font-size:58px}.hero-collage{transform:scale(.62) rotate(-2deg);width:160%;margin-left:-30%;height:310px}.squad-grid{grid-template-columns:1fr}.squad-grid .member:last-child{max-width:none;grid-column:auto}.message-board{height:430px}.sticky{width:145px;font-size:16px}.s1{left:4%}.s2{right:4%}.s3{left:4%;bottom:12%}.s4{right:4%;bottom:12%}.pin{width:115px}.pin img{width:75px;height:60px}.map{height:390px;transform:scale(.72);width:139%;margin-left:-20%}}
 
 /* Memory form modal */
 .memory-form{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(7,15,30,.72);backdrop-filter:blur(8px)}
@@ -59,6 +59,49 @@ footer{padding:25px;text-align:center;background:#12233e;color:#aebbd0;font:17px
 @media(max-width:900px){.memory-notes-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-left:24px;margin-right:24px}}
 @media(max-width:560px){.message-board{min-height:720px}.memory-notes-list{grid-template-columns:1fr;margin:330px 16px 0;gap:18px}.memory-note{min-height:115px;font-size:19px}}
 
-/* Video Vault: show videos without title text */
-.video-card strong{display:none!important}
-.video-modal-card h2,.video-modal-card p{display:none!important}
+
+/* Final responsive hero collage fix: keep every friend photo inside the viewport. */
+@media (max-width:1100px){
+  .hero-collage{
+    width:100%;
+    max-width:540px;
+    margin:20px auto 0;
+    transform:none;
+    transform-origin:center;
+    height:420px;
+  }
+  .hero-collage .polaroid{width:170px;}
+  .hero-collage .polaroid img{height:150px;}
+  .hero-collage .p1{left:2%;top:78px;}
+  .hero-collage .p2{left:34%;top:8px;}
+  .hero-collage .p3{left:66%;top:70px;}
+  .hero-collage .p4{left:25%;top:220px;}
+  .hero-collage .p5{left:64%;top:240px;}
+  .hero-collage .tape{left:36%;top:42px;}
+  .hero-collage .heart{left:0;top:38px;}
+  .hero-collage .star{right:0;top:180px;}
+  .hero-collage .smile{left:53%;bottom:0;}
+}
+
+@media (max-width:560px){
+  .hero{padding-left:18px;padding-right:18px;}
+  .hero-collage{
+    width:100%;
+    max-width:360px;
+    height:390px;
+    margin:18px auto 0;
+    transform:none;
+  }
+  .hero-collage .polaroid{width:128px;padding:8px 8px 28px;}
+  .hero-collage .polaroid img{height:116px;}
+  .hero-collage .polaroid figcaption{font-size:15px;bottom:6px;}
+  .hero-collage .p1{left:0;top:68px;}
+  .hero-collage .p2{left:31%;top:4px;}
+  .hero-collage .p3{left:auto;right:0;top:68px;}
+  .hero-collage .p4{left:17%;top:208px;}
+  .hero-collage .p5{left:auto;right:5%;top:222px;}
+  .hero-collage .tape{width:55px;height:19px;left:41%;top:36px;}
+  .hero-collage .heart{font-size:36px;left:0;top:34px;}
+  .hero-collage .star{font-size:34px;right:0;top:180px;}
+  .hero-collage .smile{font-size:34px;left:47%;bottom:4px;}
+}
