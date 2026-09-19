@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5 Idiots, 1000 Memories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="site-shell">
+    <header class="browser-bar">
+      <div class="traffic"><i></i><i></i><i></i></div>
+      <div class="browser-tools">◧　‹　›</div>
+      <div class="address">our-friendship.local</div>
+      <div class="browser-actions">♧　＋　▣</div>
+    </header>
+
+    <nav class="nav">
+      <a href="#home">We & Laughs</a>
+      <a href="#journey">The Journey</a>
+      <a href="#stories">Our Stories</a>
+      <a href="#vault">VidVault</a>
+      <a href="#message">Message</a>
+      <a href="#memories">Find Memories</a>
+    </nav>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero section-pad" id="home">
+        <div class="hero-copy reveal">
+          <p class="tiny-kicker">17 YEARS • ONE CRAZY SQUAD</p>
+          <h1>5 Idiots,<br><span>1000 Memories</span></h1>
+          <p class="hero-note">“From silly moments to unforgettable memories, <br> - this is our little piece of forever.”</p>
+          <a class="scrap-btn" href="#stories">Dive Into Our Scrapbook <span>↗</span></a>
+        </div>
+
+        <div class="hero-collage reveal delay-2">
+          <div class="tape tape-a"></div>
+          <figure class="polaroid p1"><img src="assets/friend-1.jpeg" alt="Friend memory"><figcaption>that one day ✨</figcaption></figure>
+          <figure class="polaroid p2"><img src="assets/friend-2.jpeg" alt="Friend memory"><figcaption>laughing again</figcaption></figure>
+          <figure class="polaroid p3"><img src="assets/friend-3.jpeg" alt="Friend memory"><figcaption>same idiots</figcaption></figure>
+          <figure class="polaroid p4"><img src="assets/friend-4.jpeg" alt="Friend memory"><figcaption>core memory</figcaption></figure>
+          <figure class="polaroid p5"><img src="assets/friend-5.jpeg" alt="Friend memory"><figcaption>forever us</figcaption></figure>
+          <span class="doodle heart">♥</span><span class="doodle star">✦</span><span class="doodle smile">☺</span>
+        </div>
+      </section>
+
+      <!-- SQUAD -->
+      <section class="squad section-pad" id="stories">
+        <div class="section-title reveal">
+          <span>MEET THE SQUAD</span>
+          <h2>The people behind the chaos.</h2>
+        </div>
+        <div class="squad-grid">
+          <article class="member reveal"><div class="member-photo"><img src="assets/friend-1.jpeg" alt=""></div><h3>Aathi <small>— The Plan Killer</small></h3><p>Turns every “Let’s go!” into “Maybe next time.” 😭</p></article>
+          <article class="member reveal delay-1"><div class="member-photo"><img src="assets/friend-2.jpeg" alt=""></div><h3>Bala <small>— The Anytime Guy</small></h3><p>Call him anytime, anywhere — he’s already ready to come. 😂</p></article>
+          <article class="member reveal delay-2"><div class="member-photo"><img src="assets/friend-3.jpeg" alt=""></div><h3>Gokul <small>— The Playboy</small></h3><p>Collects crushes like we collect memories. 😎</p></article>
+          <article class="member reveal delay-3"><div class="member-photo"><img src="assets/friend-4.jpeg" alt=""></div><h3>Hawan <small>— The Homebody</small></h3><p>“You guys go… I’ll be right here.” 🏠😂</p></article>
+          <article class="member reveal delay-4"><div class="member-photo"><img src="assets/friend-5.jpeg" alt=""></div><h3>Kanna <small>— The Escape Artist</small></h3><p>Rarely gets permission. Even rarer to stay out. 😭😂</p></article>
+        </div>
+      </section>
+
+      <!-- JOURNEY -->
+      <section class="journey section-pad" id="journey">
+        <div class="section-title centered reveal"><span>OUR JOURNEY MAP</span><h2>17 years in a single glowing line.</h2></div>
+        <div class="map">
+          <svg class="route" viewBox="0 0 1000 390" preserveAspectRatio="none">
+            <path d="M80 280 C150 70, 230 90, 300 245 S470 360, 550 145 S710 45, 760 230 S890 330, 940 90"/>
+          </svg>
+          <div class="pin pin1"><b>01</b><span>Rockfort temple</span><img src="assets/memory-1.jpeg"></div>
+          <div class="pin pin2"><b>02</b><span>Veerapur temple</span><img src="assets/memory-2.jpeg"></div>
+          <div class="pin pin3"><b>03</b><span>Friend's house</span><img src="assets/memory-3.jpeg"></div>
+          <div class="pin pin4"><b>04</b><span>Festival</span><img src="assets/memory-4.jpeg"></div>
+          <div class="pin pin5"><b>05</b><span>Still Together</span><img src="assets/memory-5.jpeg"></div>
+        </div>
+      </section>
+
+      <!-- MESSAGE WALL -->
+      <section class="message-wall section-pad" id="message">
+        <div class="section-title centered reveal"><span>SECRET MESSAGE WALL</span><h2>Things we never say out loud.</h2></div>
+        <div class="message-board reveal">
+          <span class="sticky s1">Hey da!<br>Still the same idiots ❤️</span>
+          <span class="sticky s2">17 years.<br>And counting...</span>
+          <span class="sticky s3">Thanks for<br>every memory.</span>
+          <span class="sticky s4">No matter where,<br>same gang ✈</span>
+          <button id="messageBtn" class="message-input">Leave a Memory <span>↗</span></button>
+          <div class="memory-notes-list" id="memoryNotesList"></div>
+          <div class="memory-form" id="memoryForm">
+            <form class="memory-form-card" id="memoryFormCard">
+              <button type="button" class="form-close" id="formClose">×</button>
+              <span>ADD TO THE MEMORY WALL</span>
+              <h3>Leave something worth remembering.</h3>
+              <input id="memoryName" type="text" maxlength="40" placeholder="Your name" required>
+              <textarea id="memoryText" maxlength="240" placeholder="Write your memory..." required></textarea>
+              <div class="form-row">
+                <input id="memoryDate" type="date">
+                <button type="submit" class="save-memory">Save Memory ♥</button>
+              </div>
+              <small>Your memory is saved to the shared memory wall, so it can be seen from other devices too.</small>
+            </form>
+          </div>
+          <span class="scribble">♡　✈　♡</span>
+        </div>
+      </section>
+
+      <!-- VIDEO VAULT -->
+      <section class="vault section-pad" id="vault">
+        <div class="section-title reveal"><span>CINEMATIC VIDEO VAULT</span><h2>Press play. Relive everything.</h2></div>
+        <div class="video-row">
+          <button class="video-card reveal" type="button" data-video="assets/video-1.mp4" data-title="The Great Trek" data-copy="One of those days that started normally and absolutely did not end normally.">
+            <video class="video-thumb" src="assets/video-1.mp4" muted autoplay loop playsinline preload="metadata"></video><span class="play">▶</span><strong>The Great Trek</strong>
+          </button>
+          <button class="video-card reveal delay-1" type="button" data-video="assets/video-2.mp4" data-title="Annoying Bala's Birthday" data-copy="A birthday, five idiots and approximately zero sensible decisions.">
+            <video class="video-thumb" src="assets/video-2.mp4" muted autoplay loop playsinline preload="metadata"></video><span class="play">▶</span><strong>Annoying Bala's Birthday</strong>
+          </button>
+          <button class="video-card reveal delay-2" type="button" data-video="assets/video-3.mp4" data-title="Graduation Speech" data-copy="The chapter ended. The friendship definitely didn't.">
+            <video class="video-thumb" src="assets/video-3.mp4" muted autoplay loop playsinline preload="metadata"></video><span class="play">▶</span><strong>Graduation Speech</strong>
+          </button>
+        </div>
+      </section>
+
+      <!-- FIND MEMORIES -->
+      <section class="find section-pad" id="memories">
+        <div class="find-box reveal">
+          <span>FIND A MEMORY</span>
+          <h2>Search our little universe.</h2>
+          <div class="search"><input id="search" placeholder="Try: Kerala, birthday, exam..."><button id="searchBtn">Find</button></div>
+          <div id="results" class="results"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>Made with too many inside jokes · 2009—2026 · <span>♥</span></footer>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-card video-modal-card"><button class="close" id="close">×</button><video id="modalVideo" class="modal-video" controls playsinline preload="metadata"></video><h2 id="modalTitle"></h2><p id="modalCopy"></p><button class="scrap-btn" id="modalOk">Close Memory</button></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>
