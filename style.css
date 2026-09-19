@@ -201,3 +201,60 @@ footer{padding:25px;text-align:center;background:#12233e;color:#aebbd0;font:17px
 
 /* Private admin manager: hidden unless the URL ends with #admin. */
 
+
+/* PREMIUM THEME — visual refresh only; layout/content kept unchanged */
+:root{
+  --ink:#18202b;
+  --cream:#efe4c8;
+  --paper:#fbf7ec;
+  --blue:#14263f;
+  --pink:#caa66a;
+  --yellow:#e8c878;
+  --muted:#667085;
+}
+body{background:#101a26;color:var(--ink)}
+body:before{
+  background:
+    radial-gradient(circle at 12% 10%,#d9bd72 0,#8d7448 18%,transparent 38%),
+    radial-gradient(circle at 88% 20%,#35546f 0,#1b3048 30%,transparent 52%),
+    linear-gradient(135deg,#0d1723 0%,#172a3f 48%,#0f1d2b 100%);
+}
+body:after{opacity:.14;background-image:linear-gradient(rgba(255,255,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:6px 6px}
+.site-shell{
+  background:linear-gradient(125deg,#f7efd9 0%,#e9ddbe 34%,#c5d0d8 66%,#7f98aa 100%);
+  box-shadow:0 28px 90px #050b14aa;
+}
+.browser-bar{background:#101b2a;color:#d9e0e8;border-bottom-color:#31445b}
+.address{background:#1b2b40;color:#c9d2dd;border-color:#3a4b61}
+.nav{background:#17283c;color:#eef2f5;border-color:#33475e}
+.nav a{color:#e4e8ed}.nav a:hover{color:#e6c978}
+.hero{background:linear-gradient(135deg,#f7f0dd 0%,#e9dfc7 48%,#c7d4db 100%)}
+.hero-copy .tiny-kicker,.section-title>span{color:#8a6c2e}
+.hero h1{color:#9b7331;text-shadow:3px 4px 0 #ead8a6}
+.hero h1 span{color:#234a68}
+.hero-note{color:#465364}
+.scrap-btn,.btn{background:linear-gradient(90deg,#a97d36,#d0ad61,#6d879b);box-shadow:0 9px 24px #263b4d33}
+.section-title h2{color:#1b3047}
+.squad{background:linear-gradient(135deg,#f8f1df,#e7dfca)}
+.member{background:linear-gradient(145deg,#fffdf7,#f0e8d4);border-color:#d7c9a7;box-shadow:0 15px 35px #30445b20}
+.member h3{color:#223b55}.member h3 small{color:#9a7a3c}.member p{color:#5e6875}
+.journey{background:linear-gradient(115deg,#eef0e8 0%,#d8d2b8 44%,#9cb0bb 100%)}
+.journey .section-title h2{color:#17334b}
+.route path{stroke:#f0d27c;filter:drop-shadow(0 0 10px #e7c96c)}
+.pin b{background:#b78b3d;box-shadow:0 0 0 4px #ffffff88,0 0 16px #d8b76588}
+.pin img{width:120px;height:94px;padding:6px;background:#fffdf5;box-shadow:0 11px 22px #2637504d}
+.message-wall{background:linear-gradient(135deg,#122238,#1b344b);}
+.message-board{background:radial-gradient(circle at 50% 42%,#355b70,#172d44 64%,#0d1d30 100%);box-shadow:inset 0 0 70px #050e1b99,0 18px 45px #07132155}
+.sticky{box-shadow:4px 10px 18px #07102166;border:1px solid #ffffff55}
+.message-input{background:linear-gradient(135deg,#b18a47aa,#46677e99);border-color:#e9d99c88}
+.vault{background:linear-gradient(135deg,#13263c,#1d3850)}
+.video-card{background:#263f58;box-shadow:0 16px 30px #08132188}
+.find{background:linear-gradient(135deg,#f2e7c9,#d7d4c4)}
+.find-box h2{color:#1d344b}.search{border-color:#aa9b78}.search button{background:#1e3853}
+footer{background:#132337;color:#bfc8d1}
+
+/* Slightly larger Journey Map photos — desktop + mobile */
+.pin img{transform:rotate(-4deg) scale(1.04)}
+@media(max-width:720px){
+  .pin img{width:108px;height:85px}
+}
