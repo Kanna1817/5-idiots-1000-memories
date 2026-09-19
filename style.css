@@ -58,3 +58,44 @@ footer{padding:25px;text-align:center;background:#12233e;color:#aebbd0;font:17px
 @keyframes noteIn{from{opacity:0;transform:translateY(18px) rotate(-1deg)}to{opacity:1;transform:rotate(-1deg)}}
 @media(max-width:900px){.memory-notes-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-left:24px;margin-right:24px}}
 @media(max-width:560px){.message-board{min-height:720px}.memory-notes-list{grid-template-columns:1fr;margin:330px 16px 0;gap:18px}.memory-note{min-height:115px;font-size:19px}}
+
+/* ===== Mobile layout polish v2 ===== */
+@media (max-width:560px){
+  /* Keep the complete 5-photo hero collage centered inside the phone viewport. */
+  .hero{
+    overflow:hidden;
+    padding-left:16px;
+    padding-right:16px;
+  }
+  .hero-collage{
+    width:560px;
+    height:330px;
+    margin:10px auto 0;
+    transform:scale(.60) rotate(-2deg);
+    transform-origin:center top;
+  }
+
+  /* Center the Journey Map instead of shifting its transformed canvas left. */
+  .map{
+    width:139%;
+    margin-left:0;
+    margin-right:0;
+    transform:scale(.72);
+    transform-origin:top left;
+  }
+
+  /* Keep the Leave a Memory control above the saved notes and always tappable. */
+  .message-input{
+    z-index:6;
+    top:275px;
+    padding:13px 19px;
+    font-size:19px;
+    white-space:nowrap;
+  }
+  .memory-notes-list{
+    position:relative;
+    z-index:3;
+    margin-top:350px;
+  }
+}
+
