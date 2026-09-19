@@ -343,6 +343,48 @@ if(adminPanel){
   });
 }
 
+
+// Supabase password-recovery flow: recovery emails return to the live site,
+// so PASSWORD_RECOVERY opens a small in-site form instead of leaving the user stuck on the homepage.
+const passwordResetPanel=document.getElementById("passwordResetPanel");
+const passwordResetForm=document.getElementById("passwordResetForm");
+const passwordResetClose=document.getElementById("passwordResetClose");
+const newPassword=document.getElementById("newPassword");
+const confirmPassword=document.getElementById("confirmPassword");
+const passwordResetSubmit=document.getElementById("passwordResetSubmit");
+const passwordResetStatus=document.getElementById("passwordResetStatus");
+function openPasswordReset(){
+  if(!passwordResetPanel) return;
+  passwordResetPanel.style.display="flex";
+  passwordResetPanel.setAttribute("aria-hidden","false");
+  if(newPassword) newPassword.focus();
+}
+function closePasswordReset(){
+  if(!passwordResetPanel) return;
+  passwordResetPanel.style.display="none";
+  passwordResetPanel.setAttribute("aria-hidden","true");
+}
+if(passwordResetClose) passwordResetClose.addEventListener("click",closePasswordReset);
+if(passwordResetPanel) passwordResetPanel.addEventListener("click",e=>{if(e.target===passwordResetPanel) closePasswordReset();});
+if(passwordResetForm) passwordResetForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const a=newPassword.value;
+  const b=confirmPassword.value;
+  if(a.length<8){passwordResetStatus.textContent="Password must be at least 8 characters."; return;}
+  if(a!==b){passwordResetStatus.textContent="Passwords do not match."; return;}
+  passwordResetSubmit.disabled=true;
+  passwordResetStatus.textContent="Updating password…";
+  const {error}=await supabaseClient.auth.updateUser({password:a});
+  passwordResetSubmit.disabled=false;
+  if(error){passwordResetStatus.textContent="Could not update password. Please request a new recovery email."; return;}
+  passwordResetStatus.textContent="Password updated successfully. You can now use it to sign in as admin.";
+  passwordResetForm.reset();
+});
+
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+  if(event==="PASSWORD_RECOVERY" && session) openPasswordReset();
+});
+
 const memories=[
   ["Kerala","First Trip to Kerala — photos, chaos and a bus full of stories."],
   ["birthday","Annoying Bala's Birthday — cake, jokes and zero peace."],

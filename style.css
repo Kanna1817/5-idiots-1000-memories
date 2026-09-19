@@ -46,19 +46,19 @@ footer{padding:25px;text-align:center;background:#12233e;color:#aebbd0;font:17px
 @keyframes formPop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:560px){.memory-form{padding:12px}.memory-form-card{width:100%;padding:30px 20px 22px;border-radius:16px}.memory-form-card h3{font-size:30px}.memory-form-card .form-row{grid-template-columns:1fr}.save-memory{width:100%}}
 
-/* Memory wall notes: keep every saved note visible without overlap */
-.message-board{height:auto;min-height:620px;overflow:hidden;padding-bottom:34px}
-.memory-notes-list{position:relative;z-index:3;margin:330px 34px 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
-.memory-note{position:relative!important;left:auto!important;top:auto!important;width:auto!important;min-height:125px;box-sizing:border-box;padding:18px 18px 16px;display:flex;flex-direction:column;justify-content:space-between;font-size:21px;line-height:1.1;box-shadow:4px 8px 14px #07102155;transform:rotate(-1deg);animation:noteIn .35s ease both}
+/* Memory wall: individual paper notes on the board */
+.message-board{height:auto;min-height:620px;overflow:hidden;padding:28px 24px 44px;box-sizing:border-box}
+.memory-notes-list{position:relative;z-index:4;margin:250px auto 0;max-width:820px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 24px;align-items:start}
+.memory-note{position:relative!important;left:auto!important;top:auto!important;width:auto!important;min-height:145px;box-sizing:border-box;padding:18px 18px 16px;display:flex;flex-direction:column;justify-content:space-between;border-radius:2px;cursor:pointer;font-size:21px;line-height:1.1;box-shadow:5px 9px 16px #07102155;transform:rotate(-1.5deg);transition:transform .22s ease,box-shadow .22s ease;animation:noteIn .35s ease both;z-index:1}
 .memory-note:nth-child(3n+2){transform:rotate(2deg)}
-.memory-note:nth-child(3n){transform:rotate(-2deg)}
-.note-message{display:block;word-break:break-word}
+.memory-note:nth-child(3n){transform:rotate(-2.5deg)}
+.memory-note:hover,.memory-note:focus-visible{transform:translateY(-5px) rotate(0deg) scale(1.025);box-shadow:7px 14px 22px #07102166;z-index:5;outline:none}
+.note-message{display:block;word-break:break-word;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical}
 .note-name{display:block;margin-top:12px;font:600 15px/1.2 Inter,sans-serif;color:#34415a}
 .note-date{display:block;margin-top:6px;font:12px/1.2 Inter,sans-serif;color:#6d6a63}
-@keyframes noteIn{from{opacity:0;transform:translateY(18px) rotate(-1deg)}to{opacity:1;transform:rotate(-1deg)}}
-@media(max-width:900px){.memory-notes-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-left:24px;margin-right:24px}}
-@media(max-width:560px){.message-board{min-height:720px}.memory-notes-list{grid-template-columns:1fr;margin:330px 16px 0;gap:18px}.memory-note{min-height:115px;font-size:19px}}
-
+@keyframes noteIn{from{opacity:0;transform:translateY(18px) rotate(-1deg)}to{opacity:1;transform:rotate(-1.5deg)}}
+@media(max-width:900px){.memory-notes-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-left:8px;margin-right:8px;gap:20px}}
+@media(max-width:560px){.message-board{min-height:760px;padding:24px 12px 36px}.memory-notes-list{grid-template-columns:1fr;margin:250px 4px 0;gap:16px}.memory-note{min-height:128px;font-size:20px;padding:17px 16px}.note-message{-webkit-line-clamp:5}}
 
 /* Final responsive hero collage fix: keep every friend photo inside the viewport. */
 @media (max-width:1100px){
