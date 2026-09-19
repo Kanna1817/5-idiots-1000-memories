@@ -105,3 +105,45 @@ footer{padding:25px;text-align:center;background:#12233e;color:#aebbd0;font:17px
   .hero-collage .star{font-size:34px;right:0;top:180px;}
   .hero-collage .smile{font-size:34px;left:47%;bottom:4px;}
 }
+
+
+/* Final mobile polish: centered journey map, visible message CTA, full search button,
+   and a slightly cleaner five-photo hero composition. */
+@media (max-width:560px){
+  /* Hero collage: give the lower-left friend more room and shift friend 3 slightly right. */
+  .hero-collage .p3{left:44%;right:auto;top:76px;z-index:2;}
+  .hero-collage .p4{left:5%;top:214px;z-index:3;}
+  .hero-collage .p5{right:1%;top:228px;}
+
+  /* Journey map: scale around the center instead of the left edge. */
+  .map{
+    transform:scale(.72);
+    transform-origin:center top;
+    width:139%;
+    margin-left:-19.5%;
+  }
+
+  /* Keep Leave a Memory above the notes instead of letting notes cover it. */
+  .message-input{
+    z-index:20;
+    top:245px;
+  }
+
+  /* Prevent the input's placeholder from forcing the Find button off-screen. */
+  .search input{
+    min-width:0;
+    width:100%;
+    box-sizing:border-box;
+  }
+  .search button{
+    flex:0 0 78px;
+    width:78px;
+    min-width:78px;
+    padding:0;
+  }
+}
+
+@media (min-width:561px) and (max-width:900px){
+  .map{transform-origin:center top;}
+  .message-input{z-index:20;}
+}
