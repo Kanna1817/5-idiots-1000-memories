@@ -83,10 +83,6 @@
       <section class="message-wall section-pad" id="message">
         <div class="section-title centered reveal"><span>SECRET MESSAGE WALL</span><h2>Things we never say out loud.</h2></div>
         <div class="message-board reveal">
-          <span class="sticky s1">Hey da!<br>Still the same idiots ❤️</span>
-          <span class="sticky s2">17 years.<br>And counting...</span>
-          <span class="sticky s3">Thanks for<br>every memory.</span>
-          <span class="sticky s4">No matter where,<br>same gang ✈</span>
           <button id="messageBtn" class="message-input">Leave a Memory <span>↗</span></button>
           <div class="memory-notes-list" id="memoryNotesList"></div>
           <div class="memory-form" id="memoryForm">
@@ -144,49 +140,11 @@
   <div class="message-viewer" id="messageViewer" aria-hidden="true">
     <div class="message-viewer-card" role="dialog" aria-modal="true" aria-labelledby="messageViewerTitle">
       <button class="message-viewer-close" id="messageViewerClose" type="button" aria-label="Close">×</button>
-      <span class="message-viewer-label">A MEMORY FROM THE WALL</span>
-      <h3 id="messageViewerTitle">A little piece of forever.</h3>
       <p id="messageViewerText"></p>
       <div class="message-viewer-meta"><span id="messageViewerName"></span><span id="messageViewerDate"></span></div>
     </div>
   </div>
 
-
-  <div class="password-reset-panel" id="passwordResetPanel" aria-hidden="true" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(10,10,20,.72);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
-    <div style="width:min(420px,100%);background:#fff;border-radius:24px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.28);position:relative;">
-      <button type="button" id="passwordResetClose" aria-label="Close" style="position:absolute;right:14px;top:10px;border:0;background:none;font-size:30px;cursor:pointer;">×</button>
-      <span style="font-size:12px;letter-spacing:.14em;font-weight:700;opacity:.65;">ACCOUNT RECOVERY</span>
-      <h2 style="margin:8px 0 8px;">Set a new password</h2>
-      <p style="margin:0 0 18px;opacity:.72;">Choose a new password for your admin account.</p>
-      <form id="passwordResetForm">
-        <input id="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="New password" required style="width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #ddd;border-radius:12px;margin-bottom:10px;">
-        <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Confirm new password" required style="width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #ddd;border-radius:12px;margin-bottom:12px;">
-        <button type="submit" id="passwordResetSubmit" style="width:100%;padding:13px 16px;border:0;border-radius:12px;cursor:pointer;">Update password</button>
-      </form>
-      <p id="passwordResetStatus" role="status" style="margin:12px 0 0;font-size:14px;"></p>
-    </div>
-  </div>
-
-  <div class="admin-panel" id="adminPanel" aria-hidden="true">
-    <div class="admin-card" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
-      <button type="button" class="admin-close" id="adminClose" aria-label="Close admin">×</button>
-      <span class="admin-label">PRIVATE ADMIN</span>
-      <h2 id="adminTitle">Manage Memory Wall</h2>
-      <div id="adminLoginView">
-        <p class="admin-help">Sign in with your private Supabase admin account to manage messages.</p>
-        <form id="adminLoginForm">
-          <input id="adminEmail" type="email" autocomplete="username" placeholder="Admin email" required>
-          <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Password" required>
-          <button type="submit" class="admin-primary">Sign in</button>
-        </form>
-      </div>
-      <div id="adminManageView" hidden>
-        <div class="admin-toolbar"><span id="adminSignedInAs"></span><button type="button" id="adminSignOut" class="admin-secondary">Sign out</button></div>
-        <div id="adminMessageList" class="admin-message-list"></div>
-      </div>
-      <p id="adminStatus" class="admin-status" role="status"></p>
-    </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
