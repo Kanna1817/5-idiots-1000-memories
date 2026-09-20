@@ -143,8 +143,8 @@ function addMemoryNote(memory, animate=true){
     <div class="reaction-area" aria-label="React to this memory">
       <div class="reaction-list" data-reactions-for="${escapeHtml(memory.id)}"></div>
       <form class="reaction-form">
-        <input class="reaction-input" type="text" inputmode="text" autocomplete="off" maxlength="8" placeholder="😊 React" aria-label="Type an emoji reaction">
-        <button type="submit" class="reaction-add" aria-label="Add reaction">＋</button>
+        <input class="reaction-input" type="text" inputmode="text" autocomplete="off" maxlength="8" placeholder="Type any emoji…" aria-label="Type any emoji reaction">
+        <button type="submit" class="reaction-add" aria-label="Add reaction">↗</button>
       </form>
     </div>`;
   const colors=["#f3e4a7","#cfe2e9","#efd5c1","#e4e1ba","#f1d3a8"];
