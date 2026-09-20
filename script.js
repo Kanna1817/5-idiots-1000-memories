@@ -51,6 +51,7 @@ function renderReactions(memoryId){
     .filter(([,count])=>count>0)
     .sort((a,b)=>b[1]-a[1])
     .map(([emoji,count])=>`<span class="reaction-chip">${escapeHtml(emoji)} <b>${count}</b></span>`).join("");
+  if(activeMemory && String(activeMemory.id)===String(memoryId)) renderViewerReactions(memoryId);
 }
 function addReactionToLocal(reaction){
   const id=String(reaction.memory_id);
@@ -84,6 +85,10 @@ const messageViewerClose = document.getElementById("messageViewerClose");
 const messageViewerText = document.getElementById("messageViewerText");
 const messageViewerName = document.getElementById("messageViewerName");
 const messageViewerDate = document.getElementById("messageViewerDate");
+const messageViewerReactions = document.getElementById("messageViewerReactions");
+const messageViewerReactionForm = document.getElementById("messageViewerReactionForm");
+const messageViewerReactionInput = document.getElementById("messageViewerReactionInput");
+let activeMemory = null;
 
 function formatMemoryDateTime(memory){
   const date = memory?.memory_date ?? memory?.date ?? "";
@@ -105,10 +110,22 @@ function formatMemoryDateTime(memory){
   return `${dateLabel || new Date(createdAt).toLocaleDateString("en-IN", {day:"2-digit", month:"short", year:"numeric", timeZone:"Asia/Kolkata"})} • ${timeLabel}`;
 }
 
+function renderViewerReactions(memoryId){
+  const counts=reactionCounts.get(String(memoryId)) || {};
+  messageViewerReactions.innerHTML=Object.entries(counts).filter(([,count])=>count>0).sort((a,b)=>b[1]-a[1]).map(([emoji,count])=>`<span class="reaction-chip">${escapeHtml(emoji)} <b>${count}</b></span>`).join("");
+}
 function openMessageViewer(memory){
+  activeMemory=memory;
   messageViewerText.textContent = String(memory.message ?? memory.text ?? "");
   messageViewerName.textContent = memory.name ? `— ${memory.name}` : "";
   messageViewerDate.textContent = formatMemoryDateTime(memory);
+  renderViewerReactions(memory.id);
+  messageViewer.dataset.memoryId = String(memory.id ?? "");
+  const viewerReactionList = document.getElementById("viewerReactionList");
+  if(viewerReactionList) viewerReactionList.dataset.reactionsFor = String(memory.id ?? "");
+  const viewerReactionForm = document.getElementById("viewerReactionForm");
+  if(viewerReactionForm) viewerReactionForm.dataset.memoryId = String(memory.id ?? "");
+  if(viewerReactionList) renderReactions(memory.id);
   messageViewer.classList.add("open");
   messageViewer.setAttribute("aria-hidden","false");
   document.body.classList.add("message-viewer-open");
@@ -138,15 +155,7 @@ function addMemoryNote(memory, animate=true){
   note.className="sticky memory-note";
   if (memory?.id != null) note.dataset.memoryId = String(memory.id);
   note.innerHTML = `<span class="note-message">${escapeHtml(memory.message ?? memory.text)}</span>
-    <span class="note-name">— ${escapeHtml(memory.name)}</span>
-    <span class="note-date">${escapeHtml(formatMemoryDateTime(memory))}</span>
-    <div class="reaction-area" aria-label="React to this memory">
-      <div class="reaction-list" data-reactions-for="${escapeHtml(memory.id)}"></div>
-      <form class="reaction-form">
-        <input class="reaction-input" type="text" inputmode="text" autocomplete="off" maxlength="8" placeholder="Type any emoji…" aria-label="Type any emoji reaction">
-        <button type="submit" class="reaction-add" aria-label="Add reaction">↗</button>
-      </form>
-    </div>`;
+    <span class="note-name">— ${escapeHtml(memory.name)}</span>`;
   const colors=["#f3e4a7","#cfe2e9","#efd5c1","#e4e1ba","#f1d3a8"];
   note.style.background=colors[(memory.id ?? renderedMemoryIds.size) % colors.length];
   note.setAttribute("role","button");
@@ -158,17 +167,6 @@ function addMemoryNote(memory, animate=true){
       e.preventDefault();
       openMessageViewer(memory);
     }
-  });
-  const reactionForm=note.querySelector(".reaction-form");
-  const reactionInput=note.querySelector(".reaction-input");
-  reactionForm.addEventListener("click",e=>e.stopPropagation());
-  reactionInput.addEventListener("click",e=>e.stopPropagation());
-  reactionForm.addEventListener("submit",async e=>{
-    e.preventDefault();
-    e.stopPropagation();
-    const value=reactionInput.value;
-    reactionInput.value="";
-    await saveReaction(memory.id,value);
   });
   if(!animate) note.style.animation="none";
   memoryNotesList.appendChild(note);
@@ -218,7 +216,22 @@ document.addEventListener("keydown",e=>{
     closeMessageViewer();
   }
 });
+messageViewerReactionForm.addEventListener("submit",async e=>{e.preventDefault();if(!activeMemory)return;const value=messageViewerReactionInput.value;messageViewerReactionInput.value="";await saveReaction(activeMemory.id,value);renderViewerReactions(activeMemory.id);});
 messageViewerClose.addEventListener("click",closeMessageViewer);
+const viewerReactionForm = document.getElementById("viewerReactionForm");
+const viewerReactionInput = document.getElementById("viewerReactionInput");
+if(viewerReactionForm){
+  viewerReactionForm.addEventListener("click",e=>e.stopPropagation());
+  viewerReactionForm.addEventListener("submit",async e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    const memoryId = messageViewer.dataset.memoryId;
+    const value = viewerReactionInput.value;
+    viewerReactionInput.value = "";
+    if(memoryId) await saveReaction(memoryId,value);
+  });
+}
+
 messageViewer.addEventListener("click",e=>{
   if(e.target===messageViewer) closeMessageViewer();
 });
