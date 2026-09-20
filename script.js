@@ -38,17 +38,77 @@ const memoryDate = document.getElementById("memoryDate");
 const messageBoard = document.querySelector(".message-board");
 const memoryNotesList = document.getElementById("memoryNotesList");
 const renderedMemoryIds = new Set();
+const reactionCounts = new Map();
+
+function normalizeEmoji(value){
+  return String(value || "").trim().replace(/\s+/g, "").slice(0, 8);
+}
+function renderReactions(memoryId){
+  const wrap=document.querySelector(`[data-reactions-for="${CSS.escape(String(memoryId))}"]`);
+  if(!wrap) return;
+  const counts=reactionCounts.get(String(memoryId)) || {};
+  wrap.innerHTML=Object.entries(counts)
+    .filter(([,count])=>count>0)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([emoji,count])=>`<span class="reaction-chip">${escapeHtml(emoji)} <b>${count}</b></span>`).join("");
+}
+function addReactionToLocal(reaction){
+  const id=String(reaction.memory_id);
+  const emoji=normalizeEmoji(reaction.emoji);
+  if(!id || !emoji) return;
+  const counts=reactionCounts.get(id) || {};
+  counts[emoji]=(counts[emoji]||0)+1;
+  reactionCounts.set(id,counts);
+  renderReactions(id);
+}
+async function loadReactions(memoryIds){
+  if(!memoryIds.length) return;
+  const {data,error}=await supabaseClient.from("memory_reactions").select("id,memory_id,emoji,created_at").in("memory_id",memoryIds);
+  if(error){ console.warn("Reactions table not ready yet:", error.message); return; }
+  data.forEach(addReactionToLocal);
+}
+async function saveReaction(memoryId, emoji){
+  const clean=normalizeEmoji(emoji);
+  if(!clean) return false;
+  const {data,error}=await supabaseClient.from("memory_reactions").insert({memory_id:Number(memoryId),emoji:clean}).select("id,memory_id,emoji,created_at").single();
+  if(error){
+    console.error("Reaction save error:",error);
+    alert("Reaction save panna mudiyala. Supabase-la memory_reactions table setup pannunga.");
+    return false;
+  }
+  addReactionToLocal(data);
+  return true;
+}
 const messageViewer = document.getElementById("messageViewer");
 const messageViewerClose = document.getElementById("messageViewerClose");
 const messageViewerText = document.getElementById("messageViewerText");
 const messageViewerName = document.getElementById("messageViewerName");
 const messageViewerDate = document.getElementById("messageViewerDate");
 
+function formatMemoryDateTime(memory){
+  const date = memory?.memory_date ?? memory?.date ?? "";
+  const createdAt = memory?.created_at ?? "";
+  if (!date && !createdAt) return "";
+  let dateLabel = date;
+  if (date) {
+    const parsed = new Date(`${date}T00:00:00`);
+    if (!Number.isNaN(parsed.getTime())) {
+      dateLabel = parsed.toLocaleDateString("en-IN", {
+        day: "2-digit", month: "short", year: "numeric"
+      });
+    }
+  }
+  if (!createdAt) return dateLabel;
+  const timeLabel = new Date(createdAt).toLocaleTimeString("en-IN", {
+    hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Asia/Kolkata"
+  });
+  return `${dateLabel || new Date(createdAt).toLocaleDateString("en-IN", {day:"2-digit", month:"short", year:"numeric", timeZone:"Asia/Kolkata"})} • ${timeLabel}`;
+}
+
 function openMessageViewer(memory){
   messageViewerText.textContent = String(memory.message ?? memory.text ?? "");
   messageViewerName.textContent = memory.name ? `— ${memory.name}` : "";
-  const date = memory.memory_date ?? memory.date ?? "";
-  messageViewerDate.textContent = date ? date : "";
+  messageViewerDate.textContent = formatMemoryDateTime(memory);
   messageViewer.classList.add("open");
   messageViewer.setAttribute("aria-hidden","false");
   document.body.classList.add("message-viewer-open");
@@ -79,7 +139,14 @@ function addMemoryNote(memory, animate=true){
   if (memory?.id != null) note.dataset.memoryId = String(memory.id);
   note.innerHTML = `<span class="note-message">${escapeHtml(memory.message ?? memory.text)}</span>
     <span class="note-name">— ${escapeHtml(memory.name)}</span>
-    <span class="note-date">${escapeHtml(memory.memory_date ?? memory.date ?? "")}</span>`;
+    <span class="note-date">${escapeHtml(formatMemoryDateTime(memory))}</span>
+    <div class="reaction-area" aria-label="React to this memory">
+      <div class="reaction-list" data-reactions-for="${escapeHtml(memory.id)}"></div>
+      <form class="reaction-form">
+        <input class="reaction-input" type="text" inputmode="text" autocomplete="off" maxlength="8" placeholder="😊 React" aria-label="Type an emoji reaction">
+        <button type="submit" class="reaction-add" aria-label="Add reaction">＋</button>
+      </form>
+    </div>`;
   const colors=["#f3e4a7","#cfe2e9","#efd5c1","#e4e1ba","#f1d3a8"];
   note.style.background=colors[(memory.id ?? renderedMemoryIds.size) % colors.length];
   note.setAttribute("role","button");
@@ -91,6 +158,17 @@ function addMemoryNote(memory, animate=true){
       e.preventDefault();
       openMessageViewer(memory);
     }
+  });
+  const reactionForm=note.querySelector(".reaction-form");
+  const reactionInput=note.querySelector(".reaction-input");
+  reactionForm.addEventListener("click",e=>e.stopPropagation());
+  reactionInput.addEventListener("click",e=>e.stopPropagation());
+  reactionForm.addEventListener("submit",async e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    const value=reactionInput.value;
+    reactionInput.value="";
+    await saveReaction(memory.id,value);
   });
   if(!animate) note.style.animation="none";
   memoryNotesList.appendChild(note);
@@ -108,6 +186,7 @@ async function loadMemories(){
     return [];
   }
   data.forEach(m => addMemoryNote(m, false));
+  await loadReactions(data.map(m=>m.id));
   return data;
 }
 
@@ -183,11 +262,14 @@ loadMemories().then(()=>{
   supabaseClient
     .channel("shared-memory-wall")
     .on("postgres_changes", {
-      event: "INSERT",
-      schema: "public",
-      table: "memories"
+      event: "INSERT", schema: "public", table: "memories"
     }, payload => {
       addMemoryNote(payload.new, true);
+    })
+    .on("postgres_changes", {
+      event: "INSERT", schema: "public", table: "memory_reactions"
+    }, payload => {
+      addReactionToLocal(payload.new);
     })
     .subscribe(status => {
       if(status === "SUBSCRIBED") console.log("Shared memory wall realtime connected");
