@@ -729,4 +729,8 @@ footer{
 .reaction-people-close{position:absolute;right:10px;top:6px;border:0;background:none;font-size:31px;line-height:1;color:#28364e;cursor:pointer;}
 .viewer-reaction-form{flex-wrap:wrap;}
 .viewer-reaction-form .reaction-name-input{width:100px!important;}
+.viewer-reaction-form .reaction-name-input,
+.viewer-reaction-form #viewerReactionInput{color:#24354b!important;background:rgba(255,255,255,.82)!important;}
+.viewer-reaction-form .reaction-name-input::placeholder,
+.viewer-reaction-form #viewerReactionInput::placeholder{color:#607084!important;opacity:1;}
 @media(max-width:560px){.viewer-reaction-form .reaction-name-input{width:92px!important}.reaction-people-card{width:calc(100vw - 28px);}}
