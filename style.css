@@ -673,12 +673,60 @@ footer{
 .viewer-reaction-area .reaction-add{width:30px;height:30px;border:1px solid rgba(42,57,75,.14);border-radius:50%;background:#f7d778;color:#24354b;font:700 17px/1 Inter,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(36,51,70,.14)}
 @media(max-width:560px){.viewer-reaction-area{align-items:center}.viewer-reaction-area .reaction-form{margin-left:0}.viewer-reaction-area .reaction-input{width:100px!important}}
 
-.memory-note .reaction-form{display:none!important}
-.memory-note .reaction-list:empty{display:none}
-.viewer-reaction-section{margin-top:20px;padding-top:14px;border-top:1px dashed rgba(37,58,96,.22)}
-.viewer-reaction-section .reaction-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.viewer-reaction-section .reaction-chip{display:inline-flex;gap:4px;padding:4px 8px;border-radius:10px;background:#fff0b8;border:1px solid #d8b75c;color:#24354b;font:17px/1.1 Inter,sans-serif}
-.viewer-reaction-section .reaction-chip b{font:700 11px Inter,sans-serif}
-.viewer-reaction-form{display:flex;gap:7px;align-items:center}
-.viewer-reaction-form input{flex:1;min-width:0;border:1px dashed #c49a42;border-radius:10px;padding:10px 12px;background:#fffdf3;color:#24354b;font:18px Caveat,cursive;outline:none}
-.viewer-reaction-form button{width:38px;height:38px;border:0;border-radius:50%;background:#f7d778;color:#24354b;font-size:22px;cursor:pointer}
+/* Existing reactions stay compact beside the author's name on each memory note. */
+.memory-note .note-name-row{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  margin-top:10px;
+  min-width:0;
+}
+.memory-note .note-name-row .note-name{
+  margin-top:0;
+  flex:0 0 auto;
+}
+.memory-note .note-reactions{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  flex-wrap:wrap;
+  min-height:0;
+}
+.memory-note .note-reactions:empty{display:none}
+.memory-note .note-reactions .reaction-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+  padding:2px 5px;
+  min-height:20px;
+  border-radius:8px;
+  background:rgba(255,255,255,.24);
+  border:1px solid rgba(255,255,255,.30);
+  color:#fff;
+  font:14px/1 Inter,sans-serif;
+  box-shadow:0 2px 5px rgba(0,0,0,.10);
+}
+.memory-note .note-reactions .reaction-chip b{
+  font:700 9px/1 Inter,sans-serif;
+  opacity:.85;
+}
+@media(max-width:560px){
+  .memory-note .note-name-row{gap:8px;}
+  .memory-note .note-reactions .reaction-chip{font-size:13px;padding:2px 4px;}
+}
+
+/* Reaction people popup */
+.reaction-chip-clickable{cursor:pointer!important;font-family:Inter,sans-serif!important;}
+.reaction-chip-clickable:hover{transform:translateY(-1px);filter:brightness(1.05);}
+.reaction-people-modal{position:fixed;inset:0;z-index:170;display:none;place-items:center;padding:18px;background:rgba(7,15,30,.72);backdrop-filter:blur(8px);}
+.reaction-people-modal.open{display:grid;animation:fadeIn .18s ease;}
+.reaction-people-card{position:relative;width:min(360px,88vw);max-height:70vh;overflow:auto;padding:30px 24px 24px;background:linear-gradient(145deg,#fff8e8,#f1ddb4);color:#20283b;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.75);}
+.reaction-people-card h3{margin:0 0 16px;font:600 31px/1 Caveat,cursive;color:#253a60;}
+.reaction-person{display:flex;align-items:center;gap:10px;padding:9px 10px;margin:6px 0;border-radius:11px;background:rgba(255,255,255,.55);border:1px solid rgba(37,52,70,.10);font:15px Inter,sans-serif;}
+.reaction-person span{font-size:22px;}
+.reaction-person-empty{padding:10px;border-radius:10px;background:rgba(255,255,255,.5);font:13px/1.4 Inter,sans-serif;color:#5e6875;}
+.reaction-people-close{position:absolute;right:10px;top:6px;border:0;background:none;font-size:31px;line-height:1;color:#28364e;cursor:pointer;}
+.viewer-reaction-form{flex-wrap:wrap;}
+.viewer-reaction-form .reaction-name-input{width:100px!important;}
+@media(max-width:560px){.viewer-reaction-form .reaction-name-input{width:92px!important}.reaction-people-card{width:calc(100vw - 28px);}}

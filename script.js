@@ -39,19 +39,20 @@ const messageBoard = document.querySelector(".message-board");
 const memoryNotesList = document.getElementById("memoryNotesList");
 const renderedMemoryIds = new Set();
 const reactionCounts = new Map();
+const reactionPeople = new Map();
 
 function normalizeEmoji(value){
   return String(value || "").trim().replace(/\s+/g, "").slice(0, 8);
 }
 function renderReactions(memoryId){
-  const wrap=document.querySelector(`[data-reactions-for="${CSS.escape(String(memoryId))}"]`);
-  if(!wrap) return;
+  const wraps=document.querySelectorAll(`[data-reactions-for="${CSS.escape(String(memoryId))}"]`);
+  if(!wraps.length) return;
   const counts=reactionCounts.get(String(memoryId)) || {};
-  wrap.innerHTML=Object.entries(counts)
+  const html=Object.entries(counts)
     .filter(([,count])=>count>0)
     .sort((a,b)=>b[1]-a[1])
     .map(([emoji,count])=>`<span class="reaction-chip">${escapeHtml(emoji)} <b>${count}</b></span>`).join("");
-  if(activeMemory && String(activeMemory.id)===String(memoryId)) renderViewerReactions(memoryId);
+  wraps.forEach(wrap=>{ wrap.innerHTML=html; });
 }
 function addReactionToLocal(reaction){
   const id=String(reaction.memory_id);
@@ -60,18 +61,41 @@ function addReactionToLocal(reaction){
   const counts=reactionCounts.get(id) || {};
   counts[emoji]=(counts[emoji]||0)+1;
   reactionCounts.set(id,counts);
+  const people=reactionPeople.get(id) || {};
+  people[emoji]=people[emoji] || [];
+  const person=String(reaction.name || "").trim();
+  if(person && !people[emoji].includes(person)) people[emoji].push(person);
+  reactionPeople.set(id,people);
   renderReactions(id);
+}
+function reactionHtml(memoryId, clickable=false){
+  const counts=reactionCounts.get(String(memoryId)) || {};
+  return Object.entries(counts).filter(([,count])=>count>0).sort((a,b)=>b[1]-a[1])
+    .map(([emoji,count])=>`<button type="button" class="reaction-chip${clickable?' reaction-chip-clickable':''}" data-reaction-emoji="${escapeHtml(emoji)}" aria-label="${escapeHtml(emoji)} ${count} reactions">${escapeHtml(emoji)} <b>${count}</b></button>`).join("");
+}
+function renderReactions(memoryId){
+  const wraps=document.querySelectorAll(`[data-reactions-for="${CSS.escape(String(memoryId))}"]`);
+  if(!wraps.length) return;
+  const html=reactionHtml(memoryId, true);
+  wraps.forEach(wrap=>{ wrap.innerHTML=html; });
+}
+function openReactionPeople(memoryId, emoji){
+  const people=((reactionPeople.get(String(memoryId)) || {})[emoji] || []).slice();
+  reactionPeopleText.innerHTML = people.length ? people.map(name=>`<div class="reaction-person"><span>${escapeHtml(emoji)}</span><strong>${escapeHtml(name)}</strong></div>`).join("") : `<div class="reaction-person-empty">This reaction was added before names were enabled.</div>`;
+  reactionPeopleModal.classList.add("open");
+  reactionPeopleModal.setAttribute("aria-hidden","false");
 }
 async function loadReactions(memoryIds){
   if(!memoryIds.length) return;
-  const {data,error}=await supabaseClient.from("memory_reactions").select("id,memory_id,emoji,created_at").in("memory_id",memoryIds);
+  const {data,error}=await supabaseClient.from("memory_reactions").select("id,memory_id,emoji,name,created_at").in("memory_id",memoryIds);
   if(error){ console.warn("Reactions table not ready yet:", error.message); return; }
   data.forEach(addReactionToLocal);
 }
-async function saveReaction(memoryId, emoji){
+async function saveReaction(memoryId, emoji, name){
   const clean=normalizeEmoji(emoji);
-  if(!clean) return false;
-  const {data,error}=await supabaseClient.from("memory_reactions").insert({memory_id:Number(memoryId),emoji:clean}).select("id,memory_id,emoji,created_at").single();
+  const cleanName=String(name||"").trim().slice(0,40);
+  if(!clean || !cleanName) return false;
+  const {data,error}=await supabaseClient.from("memory_reactions").insert({memory_id:Number(memoryId),emoji:clean,name:cleanName}).select("id,memory_id,emoji,name,created_at").single();
   if(error){
     console.error("Reaction save error:",error);
     alert("Reaction save panna mudiyala. Supabase-la memory_reactions table setup pannunga.");
@@ -85,10 +109,9 @@ const messageViewerClose = document.getElementById("messageViewerClose");
 const messageViewerText = document.getElementById("messageViewerText");
 const messageViewerName = document.getElementById("messageViewerName");
 const messageViewerDate = document.getElementById("messageViewerDate");
-const messageViewerReactions = document.getElementById("messageViewerReactions");
-const messageViewerReactionForm = document.getElementById("messageViewerReactionForm");
-const messageViewerReactionInput = document.getElementById("messageViewerReactionInput");
-let activeMemory = null;
+const reactionPeopleModal = document.getElementById("reactionPeopleModal");
+const reactionPeopleText = document.getElementById("reactionPeopleText");
+const reactionPeopleClose = document.getElementById("reactionPeopleClose");
 
 function formatMemoryDateTime(memory){
   const date = memory?.memory_date ?? memory?.date ?? "";
@@ -110,16 +133,10 @@ function formatMemoryDateTime(memory){
   return `${dateLabel || new Date(createdAt).toLocaleDateString("en-IN", {day:"2-digit", month:"short", year:"numeric", timeZone:"Asia/Kolkata"})} • ${timeLabel}`;
 }
 
-function renderViewerReactions(memoryId){
-  const counts=reactionCounts.get(String(memoryId)) || {};
-  messageViewerReactions.innerHTML=Object.entries(counts).filter(([,count])=>count>0).sort((a,b)=>b[1]-a[1]).map(([emoji,count])=>`<span class="reaction-chip">${escapeHtml(emoji)} <b>${count}</b></span>`).join("");
-}
 function openMessageViewer(memory){
-  activeMemory=memory;
   messageViewerText.textContent = String(memory.message ?? memory.text ?? "");
   messageViewerName.textContent = memory.name ? `— ${memory.name}` : "";
   messageViewerDate.textContent = formatMemoryDateTime(memory);
-  renderViewerReactions(memory.id);
   messageViewer.dataset.memoryId = String(memory.id ?? "");
   const viewerReactionList = document.getElementById("viewerReactionList");
   if(viewerReactionList) viewerReactionList.dataset.reactionsFor = String(memory.id ?? "");
@@ -155,7 +172,7 @@ function addMemoryNote(memory, animate=true){
   note.className="sticky memory-note";
   if (memory?.id != null) note.dataset.memoryId = String(memory.id);
   note.innerHTML = `<span class="note-message">${escapeHtml(memory.message ?? memory.text)}</span>
-    <span class="note-name">— ${escapeHtml(memory.name)}</span>`;
+    <span class="note-name-row"><span class="note-name">— ${escapeHtml(memory.name)}</span><span class="note-reactions reaction-list" data-reactions-for="${escapeHtml(memory.id ?? "")}"></span></span>`;
   const colors=["#f3e4a7","#cfe2e9","#efd5c1","#e4e1ba","#f1d3a8"];
   note.style.background=colors[(memory.id ?? renderedMemoryIds.size) % colors.length];
   note.setAttribute("role","button");
@@ -216,10 +233,20 @@ document.addEventListener("keydown",e=>{
     closeMessageViewer();
   }
 });
-messageViewerReactionForm.addEventListener("submit",async e=>{e.preventDefault();if(!activeMemory)return;const value=messageViewerReactionInput.value;messageViewerReactionInput.value="";await saveReaction(activeMemory.id,value);renderViewerReactions(activeMemory.id);});
 messageViewerClose.addEventListener("click",closeMessageViewer);
+reactionPeopleClose?.addEventListener("click",()=>{reactionPeopleModal.classList.remove("open");reactionPeopleModal.setAttribute("aria-hidden","true");});
+reactionPeopleModal?.addEventListener("click",e=>{if(e.target===reactionPeopleModal){reactionPeopleModal.classList.remove("open");reactionPeopleModal.setAttribute("aria-hidden","true");}});
+document.addEventListener("click",e=>{
+  const chip=e.target.closest?.(".reaction-chip-clickable");
+  if(!chip) return;
+  e.stopPropagation();
+  const wrap=chip.closest("[data-reactions-for]");
+  const memoryId=wrap?.dataset.reactionsFor;
+  if(memoryId) openReactionPeople(memoryId, chip.dataset.reactionEmoji || "");
+});
 const viewerReactionForm = document.getElementById("viewerReactionForm");
 const viewerReactionInput = document.getElementById("viewerReactionInput");
+const viewerReactionName = document.getElementById("viewerReactionName");
 if(viewerReactionForm){
   viewerReactionForm.addEventListener("click",e=>e.stopPropagation());
   viewerReactionForm.addEventListener("submit",async e=>{
@@ -227,8 +254,11 @@ if(viewerReactionForm){
     e.stopPropagation();
     const memoryId = messageViewer.dataset.memoryId;
     const value = viewerReactionInput.value;
+    const name = viewerReactionName?.value || "";
+    if(!name.trim()){ viewerReactionName?.focus(); return; }
     viewerReactionInput.value = "";
-    if(memoryId) await saveReaction(memoryId,value);
+    viewerReactionName.value = "";
+    if(memoryId) await saveReaction(memoryId,value,name);
   });
 }
 

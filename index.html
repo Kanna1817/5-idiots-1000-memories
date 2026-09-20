@@ -150,10 +150,26 @@
     <div class="message-viewer-card" role="dialog" aria-modal="true" aria-labelledby="messageViewerTitle">
       <button class="message-viewer-close" id="messageViewerClose" type="button" aria-label="Close">×</button>
       <p id="messageViewerText"></p>
-      <div class="message-viewer-meta"><span id="messageViewerName"></span><span id="messageViewerDate"></span></div><div class="viewer-reaction-section"><div id="messageViewerReactions" class="reaction-list"></div><form id="messageViewerReactionForm" class="viewer-reaction-form"><input id="messageViewerReactionInput" type="text" maxlength="8" placeholder="Type any emoji…" aria-label="Type any emoji reaction"><button type="submit" aria-label="Add reaction">＋</button></form></div>
+      <div class="message-viewer-meta"><span id="messageViewerName"></span><span id="messageViewerDate"></span></div>
+      <div class="viewer-reaction-area" aria-label="React to this memory">
+        <div class="reaction-list" id="viewerReactionList"></div>
+        <form class="reaction-form" id="viewerReactionForm">
+          <input class="reaction-input reaction-name-input" id="viewerReactionName" type="text" maxlength="40" placeholder="Your name" autocomplete="name" aria-label="Your name">
+          <input class="reaction-input" id="viewerReactionInput" type="text" maxlength="8" placeholder="Emoji…" inputmode="text" autocomplete="off" aria-label="Type an emoji reaction">
+          <button class="reaction-add" type="submit" aria-label="Add reaction">＋</button>
+        </form>
+      </div>
     </div>
   </div>
 
+  <div class="reaction-people-modal" id="reactionPeopleModal" aria-hidden="true">
+    <div class="reaction-people-card" role="dialog" aria-modal="true" aria-labelledby="reactionPeopleTitle">
+      <button class="reaction-people-close" id="reactionPeopleClose" type="button" aria-label="Close">×</button>
+      <span class="message-viewer-label">REACTION DETAILS</span>
+      <h3 id="reactionPeopleTitle">Who reacted?</h3>
+      <div id="reactionPeopleText"></div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
