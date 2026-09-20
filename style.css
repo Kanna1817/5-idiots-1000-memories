@@ -734,3 +734,22 @@ footer{
 .viewer-reaction-form .reaction-name-input::placeholder,
 .viewer-reaction-form #viewerReactionInput::placeholder{color:#607084!important;opacity:1;}
 @media(max-width:560px){.viewer-reaction-form .reaction-name-input{width:92px!important}.reaction-people-card{width:calc(100vw - 28px);}}
+
+/* FINAL MOBILE FIX: make reaction name + emoji text and placeholders clearly visible */
+.viewer-reaction-area .reaction-form .reaction-name-input,
+.viewer-reaction-area .reaction-form #viewerReactionInput,
+.viewer-reaction-form .reaction-name-input,
+.viewer-reaction-form #viewerReactionInput{
+  color:#24354b !important;
+  -webkit-text-fill-color:#24354b !important;
+  background:#ffffff !important;
+  opacity:1 !important;
+}
+.viewer-reaction-area .reaction-form .reaction-name-input::placeholder,
+.viewer-reaction-area .reaction-form #viewerReactionInput::placeholder,
+.viewer-reaction-form .reaction-name-input::placeholder,
+.viewer-reaction-form #viewerReactionInput::placeholder{
+  color:#4b5b70 !important;
+  -webkit-text-fill-color:#4b5b70 !important;
+  opacity:1 !important;
+}
